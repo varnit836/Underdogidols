@@ -1,3 +1,47 @@
+<?php
+include 'connection.php';
+  session_start();
+  if(isset($_SESSION['email']))
+  {
+      header("location: dashboard.php");
+      exit;
+  }
+  if(isset($_POST['signup']))
+  {
+      $fullname = $_POST['name'];
+      $email    = $_POST['email'];
+      $pwd      = $_POST['pwd'];
+      $confpwd  = $_POST['confpwd'];
+      $number   = preg_match('@[0-9]@', $pwd);
+      $uppercase = preg_match('@[A-Z]@', $pwd);
+      $lowercase = preg_match('@[a-z]@', $pwd);
+      $specialChars = preg_match('@[^\w]@', $pwd);
+      if(strlen($pwd) < 6 || !$number || !$uppercase || !$lowercase || !$specialChars) {
+          echo '<script>swal("Warning","Password must be at least 8 characters in length and must contain at least one number, one upper case letter, one lower case letter and one special character.", "warning")</script>';
+      }else{
+          if($pwd != $confpwd)
+          {
+          echo '<script>swal("Warning","Password and Confirm Password Should be same", "warning")</script>';
+          }else{
+              $duplicate_email = mysqli_query($conn, "SELECT * FROM users WHERE email = '$email'");
+              if(mysqli_num_rows($duplicate_email)>0){
+                  echo '<script>swal("Warning","E-mail already exist, please try with different email", "error")</script>';
+              }else{
+                  $pass = password_hash($pwd, PASSWORD_DEFAULT);
+                  $query =  "INSERT INTO users VALUES (NULL,'$fullname', '$email',DEFAULT, '$pass', current_timestamp())";
+                  $data = mysqli_query($conn, $query);
+                  if($data){
+                  echo "<script>swal('Thank You','You are Registered Successfully, Welcome to Underdogidols', 'success');
+                  sleep(5);
+                  window.location.href='login.php';</script>";
+                  }else{
+                      echo '<script>swal("Sorry", you could not be registered", "error")</script>';
+                  }
+              }
+          }
+      }
+  }
+?>
 
 
 <!DOCTYPE html>
@@ -148,44 +192,3 @@
   </div>
 </body>
 </html>
-
-<?php
-include 'connection.php';
-  if(isset($_POST['signup']))
-  {
-      $fullname = $_POST['name'];
-      $email    = $_POST['email'];
-      $pwd      = $_POST['pwd'];
-      $confpwd  = $_POST['confpwd'];
-      $number   = preg_match('@[0-9]@', $pwd);
-      $uppercase = preg_match('@[A-Z]@', $pwd);
-      $lowercase = preg_match('@[a-z]@', $pwd);
-      $specialChars = preg_match('@[^\w]@', $pwd);
-      if(strlen($pwd) < 6 || !$number || !$uppercase || !$lowercase || !$specialChars) {
-          echo '<script>swal("Warning","Password must be at least 8 characters in length and must contain at least one number, one upper case letter, one lower case letter and one special character.", "warning")</script>';
-      }else{
-          if($pwd != $confpwd)
-          {
-          echo '<script>swal("Warning","Password and Confirm Password Should be same", "warning")</script>';
-          }else{
-              $duplicate_email = mysqli_query($conn, "SELECT * FROM users WHERE email = '$email'");
-              if(mysqli_num_rows($duplicate_email)>0){
-                  echo '<script>swal("Warning","E-mail already exist, please try with different email", "error")</script>';
-              }else{
-                  $pass = password_hash($pwd, PASSWORD_DEFAULT);
-                  $query =  "INSERT INTO users VALUES (NULL,'$fullname', '$email',DEFAULT, '$pass', current_timestamp())";
-                  $data = mysqli_query($conn, $query);
-                  if($data){
-                  echo "<script>swal('Thank You','You are Registered Successfully, Welcome to Underdogidols', 'success');
-                  sleep(5);
-                  window.location.href='login.php';</script>";
-                  }else{
-                      echo '<script>swal("Sorry", you could not be registered", "error")</script>';
-                  }
-              }
-          }
-      }
-  }
-?>
-
-
