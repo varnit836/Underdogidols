@@ -28,7 +28,7 @@
           <div data-aos="zoom-out">
             <h1>Showcase your Talent with <span>Underdog Idols</span></h1>
             <div class="text-center text-lg-start">
-              <a href="#about" class="btn-get-started scrollto">Get Started</a>
+              <a href="register.php" class="btn-get-started scrollto">Get Started</a>
             </div>
           </div>
         </div>

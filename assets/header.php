@@ -29,7 +29,7 @@
       </div>
       <nav id="navbar" class="navbar" align="center" >
         <ul>
-          <li><a class="nav-link scrollto active" href="#">HOME</a></li>
+          <li><a class="nav-link scrollto" href="#">HOME</a></li>
           <li><a class="nav-link scrollto" href="#">CONTESTANTS</a></li>
           <li><a class="nav-link scrollto" href="#">VIDEOS</a></li>
           <li><a class="nav-link scrollto" href="#">ABOUT US</a></li>
